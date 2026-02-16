@@ -87,7 +87,8 @@ export type WebSocketMessage =
   | WebSocketTraceUpdateMessage
   | WebSocketLogUpdateMessage
   | WebSocketClearDataMessage
-  | WebSocketInfoMessage;
+  | WebSocketInfoMessage
+  | WebSocketRemoteTapStatusMessage;
 
 export interface TraceUpdateData {
   trace: Trace;
@@ -96,6 +97,19 @@ export interface TraceUpdateData {
 
 export interface LogUpdateData {
   log: Log;
+}
+
+export type RemoteTapStatus = 'disconnected' | 'connecting' | 'connected' | 'error';
+
+export interface RemoteTapState {
+  status: RemoteTapStatus;
+  url: string | null;
+  error: string | null;
+}
+
+export interface WebSocketRemoteTapStatusMessage {
+  type: 'remotetap_status';
+  data: RemoteTapState;
 }
 
 // API response types

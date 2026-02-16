@@ -98,6 +98,33 @@ export function broadcastLogUpdate(data: any) {
   }
 }
 
+export function broadcastRemoteTapStatus(data: any) {
+  if (peers.size === 0) {
+    return;
+  }
+
+  const message = JSON.stringify({
+    type: 'remotetap_status',
+    data,
+  });
+
+  const disconnectedPeers: any[] = [];
+
+  for (const peer of peers) {
+    try {
+      peer.send(message);
+    } catch (error) {
+      console.error('[broadcast] Failed to send to peer:', error);
+      disconnectedPeers.push(peer);
+    }
+  }
+
+  // Clean up disconnected peers
+  for (const peer of disconnectedPeers) {
+    peers.delete(peer);
+  }
+}
+
 export function broadcastClearData() {
   if (peers.size === 0) {
     return;

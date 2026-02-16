@@ -47,12 +47,14 @@ export function useLogs() {
   };
 
   // Fetch all logs
-  async function fetchLogs() {
+  async function fetchLogs(limit = 500) {
     loading.value = true;
     error.value = null;
 
     try {
-      const response = await $fetch<LogsResponse>('/api/logs');
+      const response = await $fetch<LogsResponse>('/api/logs', {
+        query: { limit },
+      });
       logs.value = response.logs;
     } catch (err: any) {
       console.error('Error fetching logs:', err);
